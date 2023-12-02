@@ -53,8 +53,10 @@ fn main() -> io::Result<()> {
     for line in reader.lines() {
         let line = line?;
         let game = process_line(&line);
-        let sum = sum_colors(&game.colors);
-        if sum.red <= red_limit && sum.green <= green_limit && sum.blue <= blue_limit {
+        let colors_within_limits = game.colors.iter().all(|color| {
+            color.red <= red_limit && color.green <= green_limit && color.blue <= blue_limit
+        });
+        if colors_within_limits {
             result.push(game.game_number);
         }
     }
@@ -107,20 +109,5 @@ fn process_line(line: &str) -> Game {
 // First load the text file
 // Make an int result = 0
 // Sum the red, green, and blue squares from each row
-fn sum_colors(colors: &[Color]) -> Color {
-    let mut sum = Color {
-        red: 0,
-        green: 0,
-        blue: 0,
-    };
-
-    for color in colors {
-        sum.red += color.red;
-        sum.green += color.green;
-        sum.blue += color.blue;
-    }
-
-    sum
-}
 // If the sum of any value is less or equal to input params, add it to the result
 // Return the result
